@@ -17,7 +17,7 @@
 
 <ng-container *ngIf="searchTerm; else empty">
   <div class="book-grid">
-    <div class="book" data-testing="book-item" *ngFor="let book of books">
+    <div class="book" data-testing="book-item" *ngFor="let book of books; trackBy: trackByFn;">
       <div class="book--title">
         {{ book.title }}
       </div>
