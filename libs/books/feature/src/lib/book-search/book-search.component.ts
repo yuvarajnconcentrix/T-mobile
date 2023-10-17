@@ -10,6 +10,7 @@ import {
 import { FormBuilder } from '@angular/forms';
 import { Book } from '@tmo/shared/models';
 import { Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'tmo-book-search',
@@ -29,6 +30,9 @@ export class BookSearchComponent implements OnInit, OnDestroy {
     private readonly fb: FormBuilder
   ) {}
 
+  set searchTerm(term: string){
+    this.searchForm.setValue({term})
+  }
   get searchTerm(): string {
     return this.searchForm.value.term;
   }
@@ -36,6 +40,13 @@ export class BookSearchComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.subscribtion.add(this.store.select(getAllBooks).subscribe(books => {
       this.books = books;
+    }))
+
+    this.subscribtion.add(this.searchForm.get('term').valueChanges.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.searchBooks();
     }))
   }
 
