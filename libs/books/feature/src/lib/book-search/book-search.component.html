@@ -17,7 +17,7 @@
 
 <ng-container *ngIf="searchTerm; else empty">
   <div class="book-grid">
-    <div class="book" data-testing="book-item" *ngFor="let book of books; trackBy: trackByFn;">
+    <div class="book" data-testing="book-item" *ngFor="let book of books;let idx = index trackBy: trackByFn;">
       <div class="book--title">
         {{ book.title }}
       </div>
@@ -40,6 +40,7 @@
               [disabled]="book.isAdded"
               role="button"
               aria-label="Want to Read"
+              [attr.data-btn-id]="idx"
             >
               Want to Read
             </button>
